@@ -19,5 +19,8 @@ https://www.anaconda.com/products/individual
 
 pyinstaller
 
+In the anaconda environment install the pyinstaller package and build the exe.
+~~~
 pip install pyinstaller
 pyinstaller --noconfirm --onefile --console --exclude-module "pandas" --exclude-module "numpy"  "C:/Users/marcv/PycharmProjects/personal/automagicppt/__main__.py"
+~~~
