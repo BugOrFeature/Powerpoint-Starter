@@ -9,8 +9,11 @@ import errno
 import pyautogui
 
 filesInDirectory = [f for f in os.listdir(os.getcwd()) if isfile(join(os.getcwd(), f))]
+# filter in files with a pptx extension and exclude temporary files.
 POWERPOINT_FILES = [f for f in filesInDirectory if '.pptx' in f and '~$' not in f]
 START_IN_PRESENTATION_MODE = True
+
+# change this path if its different on your pc
 POWERPOINT_PATH = 'C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.exe'
 
 
