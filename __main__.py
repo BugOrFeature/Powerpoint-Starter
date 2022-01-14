@@ -14,7 +14,7 @@ POWERPOINT_FILES = [f for f in filesInDirectory if '.pptx' in f and '~$' not in 
 START_IN_PRESENTATION_MODE = True
 
 # change this path if its different on your pc
-POWERPOINT_PATH = 'C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.exe'
+POWERPOINT_PATH = 'C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\POWERPNT.exe'
 
 
 def start_presentation(file_name=None):
