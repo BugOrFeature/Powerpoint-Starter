@@ -93,7 +93,19 @@ if __name__ == "__main__":
 
     for i in range(len(monitors)):
         time.sleep(1)
-        win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
-        time.sleep(2)
-        if START_IN_PRESENTATION_MODE:
-            win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
+        if len(POWERPOINT_FILES) == len(monitors) or len(POWERPOINT_FILES) > len(monitors):
+            win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
+            time.sleep(2)
+            if START_IN_PRESENTATION_MODE:
+                win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
+        elif len(POWERPOINT_FILES) == 1:
+            win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[0], monitors[i]])
+            time.sleep(2)
+            if START_IN_PRESENTATION_MODE:
+                win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[0], monitors[i]])
+        else:
+            while i <= len(POWERPOINT_FILES):
+                win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
+                time.sleep(2)
+                if START_IN_PRESENTATION_MODE:
+                    win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
