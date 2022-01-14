@@ -12,7 +12,7 @@ The .exe will run upon starting the user environment.
 ## How to build
 The project is made using anaconda as the package manager.
 This was due to some difficulties with the versioning of the win32api and win32gui package and the python interpreter. 
-The most straightforward way to run the program is thereby by using anaconda3 and creating the executable using pyinstaller.
+The most straightforward way to make changes to the program is thereby by using anaconda3 and creating the executable using pyinstaller.
 
 anaconda3
 https://www.anaconda.com/products/individual
