@@ -38,23 +38,23 @@ def maximiseWindowCallback(hwnd, args):
     window_name = args[0]
     monitor = args[1]
     pyRect = monitor[2]
-
-    print("window callback")
     try:
         # Get window title
-        if DEBUG:
-            print(f"Move window - window: {window_name}, monitor: {monitor}, width: {abs(pyRect[0] + pyRect[2])}")
         title = win32gui.GetWindowText(hwnd)
         if title.find(window_name) != -1:
+            if DEBUG:
+                print(f"Move window- x:{pyRect[0]}, y:{pyRect[2]}, width:{pyRect[3]} height:{pyRect[0]}")
             window = pyautogui.getWindowsWithTitle(window_name)
             curr = window.pop()
             # If the window is already maximized we have to restore it in order to avoid "double maximising" windows.
             if curr.isMaximized:
                 curr.restore()
-            width = abs(pyRect[0] + pyRect[2])
+            width = abs(pyRect[2] - pyRect[0])
             if DEBUG:
                 print("Move window")
             win32gui.MoveWindow(hwnd, pyRect[0], pyRect[1], width, pyRect[3], True)
+            if DEBUG:
+                print(f"Moved window- x:{pyRect[0]}, y:{pyRect[1]}, width:{width} height:{pyRect[3]}")
     except Exception as e:
         print(str(e))
         pass
@@ -66,7 +66,9 @@ def startPresentationCallback(hwnd, args):
     top level application window.
     """
     window_name = args[0]
-
+    print(f"Window name: {window_name}")
+    print(f"Window text: {win32gui.GetWindowText(hwnd)}")
+    print(f"Window matches window name: {win32gui.GetWindowText(hwnd).find(window_name)}")
     try:
         title = win32gui.GetWindowText(hwnd)
         if title.find(window_name) != -1:
@@ -111,9 +113,10 @@ if __name__ == "__main__":
     if DEBUG:
         print(f"windows: {windows}")
 
+    powerpoint_name = [os.path.splitext(x)[0] for x in POWERPOINT_FILES]
     for i in range(len(monitors)):
         print("starting")
-        win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
+        win32gui.EnumWindows(maximiseWindowCallback, [powerpoint_name[i], monitors[i]])
         time.sleep(2)
         if START_IN_PRESENTATION_MODE:
-            win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
+            win32gui.EnumWindows(startPresentationCallback, [powerpoint_name[i], monitors[i]])
