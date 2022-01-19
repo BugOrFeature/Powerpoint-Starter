@@ -6,7 +6,7 @@ The program will import all .pptx files from the current folder, and will maximi
 
 
 ## How to run
-Place the built .exe in the startup folder (commonly located at : C:\Users\$user\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup) together with the .pptx files you would like to launch.
+Place the built .exe in the startup folder (commonly located at : C:\Users\\$user\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup) together with the .pptx files you would like to launch.
 The .exe will run upon starting the user environment.
 
 ## How to build
