@@ -22,5 +22,6 @@ pyinstaller
 In the anaconda environment install the pyinstaller package and build the exe.
 ~~~
 pip install pyinstaller
-pyinstaller --noconfirm --onefile --console --exclude-module "pandas" --exclude-module "numpy"  "C:/Users/marcv/PycharmProjects/personal/automagicppt/__main__.py"
+pyinstaller --noconfirm --onefile --console --exclude-module "pandas" --exclude-module "numpy" --exclude-module "PyQt5" --exclude-module "PIL" --exclude-
+module "matplotlib" "C:/Users/marcv/PycharmProjects/personal/automagicppt/__main__.py"
 ~~~
