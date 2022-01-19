@@ -12,6 +12,7 @@ filesInDirectory = [f for f in os.listdir(os.getcwd()) if isfile(join(os.getcwd(
 # filter in files with a pptx extension and exclude temporary files.
 POWERPOINT_FILES = [f for f in filesInDirectory if '.pptx' in f and '~$' not in f]
 START_IN_PRESENTATION_MODE = True
+DEBUG = True
 
 # change this path if its different on your pc
 POWERPOINT_PATH = 'C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\POWERPNT.exe'
@@ -38,8 +39,11 @@ def maximiseWindowCallback(hwnd, args):
     monitor = args[1]
     pyRect = monitor[2]
 
+    print("window callback")
     try:
         # Get window title
+        if DEBUG:
+            print(f"Move window - window: {window_name}, monitor: {monitor}, width: {abs(pyRect[0] + pyRect[2])}")
         title = win32gui.GetWindowText(hwnd)
         if title.find(window_name) != -1:
             window = pyautogui.getWindowsWithTitle(window_name)
@@ -48,6 +52,8 @@ def maximiseWindowCallback(hwnd, args):
             if curr.isMaximized:
                 curr.restore()
             width = abs(pyRect[0] + pyRect[2])
+            if DEBUG:
+                print("Move window")
             win32gui.MoveWindow(hwnd, pyRect[0], pyRect[1], width, pyRect[3], True)
     except Exception as e:
         print(str(e))
@@ -60,9 +66,13 @@ def startPresentationCallback(hwnd, args):
     top level application window.
     """
     window_name = args[0]
+
     try:
         title = win32gui.GetWindowText(hwnd)
         if title.find(window_name) != -1:
+            if DEBUG:
+                print(f"Maximise and start presentation - window: {window_name}")
+                print("start presentation callback")
             window = pyautogui.getWindowsWithTitle(window_name)
             time.sleep(.5)
             curr = window.pop()
@@ -73,6 +83,8 @@ def startPresentationCallback(hwnd, args):
             pyautogui.keyDown('f5')
             time.sleep(.5)
             pyautogui.keyUp('f5')
+            if DEBUG:
+                print("maximise and start presentation")
     except Exception as e:
         print(str(e))
         pass
@@ -85,30 +97,23 @@ if __name__ == "__main__":
     for hMonitor, hdcMonitor, pyRect in win32api.EnumDisplayMonitors():
         monitors.append((hMonitor, hdcMonitor, pyRect))
 
+    if DEBUG:
+        print(f"monitors: {monitors}")
+        print(f"powerpoint files: {POWERPOINT_FILES}")
     # OPEN POWER POINTS
     for i in range(len(POWERPOINT_FILES)):
         time.sleep(.5)
         start_presentation(POWERPOINT_FILES[i])
 
     # MAXIMISE power points on monitors
-    time.sleep(5)
+    time.sleep(2)
     windows = pyautogui.getAllWindows()
+    if DEBUG:
+        print(f"windows: {windows}")
 
     for i in range(len(monitors)):
-        time.sleep(1)
-        if len(POWERPOINT_FILES) == len(monitors) or len(POWERPOINT_FILES) > len(monitors):
-            win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
-            time.sleep(2)
-            if START_IN_PRESENTATION_MODE:
-                win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
-        elif len(POWERPOINT_FILES) == 1:
-            win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[0], monitors[i]])
-            time.sleep(2)
-            if START_IN_PRESENTATION_MODE:
-                win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[0], monitors[i]])
-        else:
-            while i <= len(POWERPOINT_FILES):
-                win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
-                time.sleep(2)
-                if START_IN_PRESENTATION_MODE:
-                    win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
+        print("starting")
+        win32gui.EnumWindows(maximiseWindowCallback, [POWERPOINT_FILES[i], monitors[i]])
+        time.sleep(2)
+        if START_IN_PRESENTATION_MODE:
+            win32gui.EnumWindows(startPresentationCallback, [POWERPOINT_FILES[i], monitors[i]])
